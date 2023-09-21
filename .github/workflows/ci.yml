@@ -53,7 +53,7 @@ jobs:
         id: test-action
         uses: ./
         with:
-          INPUT_VERSION_JSON: '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
+          INPUT_VERSION_JSON: '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"suffix":"alpha"}'
 
       - name: Print Output
         id: output
