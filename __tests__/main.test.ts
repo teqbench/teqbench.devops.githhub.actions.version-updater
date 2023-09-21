@@ -26,12 +26,12 @@ describe('action', () => {
     jest.clearAllMocks()
   })
 
-  it('sets the time output', async () => {
+  it('valid version json', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
-        case 'milliseconds':
-          return '500'
+        case 'INPUT_VERSION_JSON':
+          return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
         default:
           return ''
       }
@@ -39,30 +39,14 @@ describe('action', () => {
 
     await main.run()
     expect(runMock).toHaveReturned()
-
-    // Verify that all of the core library functions were called correctly
-    expect(debugMock).toHaveBeenNthCalledWith(1, 'Waiting 500 milliseconds ...')
-    expect(debugMock).toHaveBeenNthCalledWith(
-      2,
-      expect.stringMatching(timeRegex)
-    )
-    expect(debugMock).toHaveBeenNthCalledWith(
-      3,
-      expect.stringMatching(timeRegex)
-    )
-    expect(setOutputMock).toHaveBeenNthCalledWith(
-      1,
-      'time',
-      expect.stringMatching(timeRegex)
-    )
   })
 
-  it('sets a failed status', async () => {
+  it('invalid version json', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
-        case 'milliseconds':
-          return 'this is not a number'
+        case 'INPUT_VERSION_JSON':
+          return 'this is not valid version json'
         default:
           return ''
       }
@@ -72,9 +56,6 @@ describe('action', () => {
     expect(runMock).toHaveReturned()
 
     // Verify that all of the core library functions were called correctly
-    expect(setFailedMock).toHaveBeenNthCalledWith(
-      1,
-      'milliseconds not a number'
-    )
+    expect(setFailedMock).toHaveBeenNthCalledWith(1, 'Invalid version json')
   })
 })

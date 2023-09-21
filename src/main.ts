@@ -1,13 +1,12 @@
 import * as core from '@actions/core'
-import { wait } from './wait'
 
 interface Version {
-  major: number;
-  minor: number;
-  patch: number;
-  build: number;
-  revision: number;
-  suffix: string;
+  major: number
+  minor: number
+  patch: number
+  build: number
+  revision: number
+  suffix: string
 }
 
 /**
@@ -16,10 +15,7 @@ interface Version {
  */
 export async function run(): Promise<void> {
   try {
-    const version: Version = core.getInput('version-json')
-
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Parsing ${version_json} ...`)
+    const version: Version = JSON.parse(core.getInput('INPUT_VERSION_JSON'))
 
     // Set outputs for other workflow steps to use
     core.setOutput('major', version.major)
@@ -28,9 +24,10 @@ export async function run(): Promise<void> {
     core.setOutput('build', version.build)
     core.setOutput('revision', version.revision)
     core.setOutput('suffix', version.suffix)
-    
   } catch (error) {
     // Fail the workflow run if an error occurs
-    if (error instanceof Error) core.setFailed(error.message)
+    if (error instanceof Error) {
+      core.setFailed('Invalid version json')
+    }
   }
 }

@@ -4,7 +4,7 @@ author: "Teq Bench"
 
 # Define your inputs here.
 inputs:
-  version-json:
+  INPUT_VERSION_JSON:
     required: true
     description: "JSON string containing version data."
 
