@@ -4,15 +4,24 @@ author: "Teq Bench"
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  version-json:
     required: true
-    default: '1000'
+    description: "JSON string containing version data."
 
 # Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  major:
+    description: "Major version component"
+  minor:
+    description: "Minor version component"
+  patch:
+    description: "Patch version component"
+  build:
+    description: "Build version component"
+  revision:
+    description: "Revision version component"
+  suffix:
+    description: "Suffix version component"
 
 runs:
   using: node20
