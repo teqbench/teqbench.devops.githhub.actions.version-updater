@@ -58,10 +58,10 @@ jobs:
       - name: Print Output
         id: output
         run: |
-          echo "major version =${{ steps.test-action.outputs.major }}"
-          echo "minor version =${{ steps.test-action.outputs.minor }}"
-          echo "patch version =${{ steps.test-action.outputs.patch }}"
-          echo "build version =${{ steps.test-action.outputs.build }}"
-          echo "revision version =${{ steps.test-action.outputs.revision }}"
-          echo "suffix version =${{ steps.test-action.outputs.suffix }}"
+          echo "major version = ${{ steps.test-action.outputs.major }}"
+          echo "minor version = ${{ steps.test-action.outputs.minor }}"
+          echo "patch version = ${{ steps.test-action.outputs.patch }}"
+          echo "build version = ${{ steps.test-action.outputs.build }}"
+          echo "revision version = ${{ steps.test-action.outputs.revision }}"
+          echo "suffix version = ${{ steps.test-action.outputs.suffix }}"
           
