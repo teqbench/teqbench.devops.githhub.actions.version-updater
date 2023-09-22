@@ -11,6 +11,7 @@ import * as main from '../src/main'
 
 // Mock the GitHub Actions core library
 const getInputMock = jest.spyOn(core, 'getInput')
+const etOutputMock = jest.spyOn(core, 'setOutput')
 const setFailedMock = jest.spyOn(core, 'setFailed')
 
 // Mock the action's main function
@@ -25,6 +26,8 @@ describe('action', () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
+        case 'INPUT_UPDATE_TYPE':
+          return 'MAJOR'
         case 'INPUT_VERSION_JSON':
           return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
         default:
@@ -36,10 +39,86 @@ describe('action', () => {
     expect(runMock).toHaveReturned()
   })
 
+  it('valid version json; update major', async () => {
+    // Set the action's inputs as return values from core.getInput()
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'INPUT_UPDATE_TYPE':
+          return 'MAJOR'
+        case 'INPUT_VERSION_JSON':
+          return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+  })
+
+  it('valid version json; update minor', async () => {
+    // Set the action's inputs as return values from core.getInput()
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'INPUT_UPDATE_TYPE':
+          return 'MINOR'
+        case 'INPUT_VERSION_JSON':
+          return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+  })
+
+  it('valid version json; update patch', async () => {
+    // Set the action's inputs as return values from core.getInput()
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'INPUT_UPDATE_TYPE':
+          return 'PATCH'
+        case 'INPUT_VERSION_JSON':
+          return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+  })
+
+  it('invalid update type', async () => {
+    // Set the action's inputs as return values from core.getInput()
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'INPUT_UPDATE_TYPE':
+          return 'invalid'
+        case 'INPUT_VERSION_JSON':
+          return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+
+    // Verify that all of the core library functions were called correctly
+    expect(setFailedMock).toHaveBeenNthCalledWith(
+      1,
+      'Invalid update type specified. Valid options: MAJOR, MINOR or PATCH.'
+    )
+  })
+
   it('invalid version json', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
+        case 'INPUT_UPDATE_TYPE':
+          return 'MAJOR'
         case 'INPUT_VERSION_JSON':
           return 'this is not valid version json'
         default:
