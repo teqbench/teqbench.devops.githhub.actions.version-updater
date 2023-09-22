@@ -4,7 +4,12 @@ author: "Teq Bench"
 
 # Define your inputs here.
 inputs:
+  INPUT_UPDATE_TYPE:
+    type: string
+    required: true
+    description: "Type of version update. Options: MAJOR, MINOR, PATCH."
   INPUT_VERSION_JSON:
+    type: string
     required: true
     description: "JSON string containing version data."
 
@@ -22,7 +27,11 @@ outputs:
     description: "Revision version component"
   suffix:
     description: "Suffix version component"
-
+  version:
+    description: "Four part version number: major.minor.build.revision"
+  tag:
+    description: "Four part version number with 'v' prefix"
+    
 runs:
   using: node20
   main: dist/index.js
