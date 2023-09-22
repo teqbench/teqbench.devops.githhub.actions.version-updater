@@ -2769,7 +2769,7 @@ async function run() {
         // error when trying to cast a string to the enum.
         // Per https://thoughtbot.com/blog/the-trouble-with-typescript-enums, what's implemented below
         // seems to be the best workaround
-        const inputReleaseType = core.getInput('INPUT_RELEASE_TYPE');
+        const inputReleaseType = core.getInput('release-type');
         const releaseType = stringToEnum(inputReleaseType);
         if (releaseType === null) {
             throw new Error('Update type is undefined');
@@ -2794,7 +2794,7 @@ function stringToEnum(value) {
 }
 async function processVersionJson(releaseType) {
     try {
-        const inputVersionJson = core.getInput('INPUT_VERSION_JSON');
+        const inputVersionJson = core.getInput('version-json');
         const version = JSON.parse(inputVersionJson);
         // NOTE: for Trading Toolbox, patch and reversion are the same.
         switch (releaseType) {

@@ -25,9 +25,9 @@ describe('action', () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
-        case 'INPUT_RELEASE_TYPE':
+        case 'release-type':
           return 'MAJOR'
-        case 'INPUT_VERSION_JSON':
+        case 'version-json':
           return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
         default:
           return ''
@@ -42,9 +42,9 @@ describe('action', () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
-        case 'INPUT_RELEASE_TYPE':
+        case 'release-type':
           return 'MAJOR'
-        case 'INPUT_VERSION_JSON':
+        case 'version-json':
           return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
         default:
           return ''
@@ -59,9 +59,9 @@ describe('action', () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
-        case 'INPUT_RELEASE_TYPE':
+        case 'release-type':
           return 'MINOR'
-        case 'INPUT_VERSION_JSON':
+        case 'version-json':
           return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
         default:
           return ''
@@ -76,9 +76,9 @@ describe('action', () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
-        case 'INPUT_RELEASE_TYPE':
+        case 'release-type':
           return 'PATCH'
-        case 'INPUT_VERSION_JSON':
+        case 'version-json':
           return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
         default:
           return ''
@@ -93,9 +93,9 @@ describe('action', () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
-        case 'INPUT_RELEASE_TYPE':
+        case 'release-type':
           return 'invalid'
-        case 'INPUT_VERSION_JSON':
+        case 'version-json':
           return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
         default:
           return ''
@@ -116,9 +116,9 @@ describe('action', () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
-        case 'INPUT_RELEASE_TYPE':
+        case 'release-type':
           return 'MAJOR'
-        case 'INPUT_VERSION_JSON':
+        case 'version-json':
           return 'this is not valid version json'
         default:
           return ''
