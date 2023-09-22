@@ -2770,6 +2770,7 @@ async function run() {
         // Per https://thoughtbot.com/blog/the-trouble-with-typescript-enums, what's implemented below
         // seems to be the best workaround
         const inputReleaseType = core.getInput('release-type');
+        core.debug(`version release type = ${inputReleaseType}`);
         const releaseType = stringToEnum(inputReleaseType);
         if (releaseType === null) {
             throw new Error('Update type is undefined');

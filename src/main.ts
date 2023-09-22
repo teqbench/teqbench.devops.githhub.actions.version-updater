@@ -27,6 +27,8 @@ export async function run(): Promise<void> {
     // seems to be the best workaround
     const inputReleaseType: string = core.getInput('release-type')
 
+    core.debug(`version release type = ${inputReleaseType}`)
+
     const releaseType: VersionReleaseType | null =
       stringToEnum(inputReleaseType)
 
