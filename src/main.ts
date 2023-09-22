@@ -27,15 +27,14 @@ export async function run(): Promise<void> {
     // seems to be the best workaround
     const inputReleaseType: string = core.getInput('INPUT_RELEASE_TYPE')
 
-    const updateType: VersionReleaseType | undefined = Object.values(
-      VersionReleaseType
-    ).find(x => x === inputReleaseType)
+    const releaseType: VersionReleaseType | null =
+      stringToEnum(inputReleaseType)
 
-    if (updateType === undefined) {
+    if (releaseType === null) {
       throw new Error('Update type is undefined')
     }
 
-    processVersionJson(updateType)
+    processVersionJson(releaseType)
   } catch (error) {
     console.log(error)
 
@@ -48,15 +47,23 @@ export async function run(): Promise<void> {
   }
 }
 
+function stringToEnum(value: string): VersionReleaseType | null {
+  const uc: string = value.toUpperCase()
+  if (Object.values(VersionReleaseType).findIndex(x => x === uc) >= 0) {
+    return value as VersionReleaseType
+  }
+  return null
+}
+
 async function processVersionJson(
-  updateType: VersionReleaseType
+  releaseType: VersionReleaseType
 ): Promise<void> {
   try {
     const inputVersionJson: string = core.getInput('INPUT_VERSION_JSON')
     const version: Version = JSON.parse(inputVersionJson)
 
     // NOTE: for Trading Toolbox, patch and reversion are the same.
-    switch (updateType) {
+    switch (releaseType) {
       case VersionReleaseType.MAJOR: {
         // Increment major version component is unchanged.
         // Reset minor, patch/revision to 0.
