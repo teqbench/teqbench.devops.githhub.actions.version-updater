@@ -1,4 +1,4 @@
-import * as core from '@actions/core'
+import { getInput, setFailed, setOutput } from '@actions/core'
 
 interface Version {
   major: number
@@ -25,9 +25,9 @@ export async function run(): Promise<void> {
     // error when trying to cast a string to the enum.
     // Per https://thoughtbot.com/blog/the-trouble-with-typescript-enums, what's implemented below
     // seems to be the best workaround
-    const inputReleaseType: string = core.getInput('release-type')
+    const inputReleaseType: string = getInput('release-type')
 
-    core.debug(`version release type = ${inputReleaseType}`)
+    // debug(`version release type = ${inputReleaseType}`)
 
     const releaseType: VersionReleaseType | null =
       stringToEnum(inputReleaseType)
@@ -36,13 +36,70 @@ export async function run(): Promise<void> {
       throw new Error('Update type is undefined')
     }
 
-    processVersionJson(releaseType)
+    // processVersionJson(releaseType)
+    try {
+      const inputVersionJson: string = getInput('version-json')
+      const version: Version = JSON.parse(inputVersionJson)
+
+      // NOTE: for Trading Toolbox, patch and reversion are the same.
+      switch (releaseType) {
+        case VersionReleaseType.MAJOR: {
+          // Increment major version component is unchanged.
+          // Reset minor, patch/revision to 0.
+
+          version.major++
+          version.minor = 0
+          version.patch = version.revision = 0
+
+          break
+        }
+        case VersionReleaseType.MINOR: {
+          // Major version component is unchanged.
+          // Increment minor version component.
+          // Reset patch/revision to 0.
+
+          version.minor++
+          version.patch = version.revision = 0
+
+          break
+        }
+        case VersionReleaseType.PATCH: {
+          // Major version component is unchanged.
+          // Minor version component is unchanged.
+          // Incremment patch/revision.
+
+          version.patch = version.revision++
+          break
+        }
+      }
+
+      // Build version component always increments.
+      version.build++
+
+      // Set outputs for other workflow steps to use
+      setOutput('major', version.major)
+      setOutput('minor', version.minor)
+      setOutput('patch', version.patch)
+      setOutput('build', version.build)
+      setOutput('revision', version.revision)
+      setOutput('suffix', version.suffix)
+
+      const versionString = `${version.major}.${version.minor}.${version.build}.${version.revision}`
+
+      setOutput('version', versionString)
+      setOutput('tag', `v${versionString}`)
+    } catch (error) {
+      // Fail the workflow run if an error occurs
+      if (error instanceof Error) {
+        setFailed('Invalid version json')
+      }
+    }
   } catch (error) {
     console.log(error)
 
     // Fail the workflow run if an error occurs
     if (error instanceof Error) {
-      core.setFailed(
+      setFailed(
         'Invalid update type specified. Valid options: MAJOR, MINOR or PATCH.'
       )
     }
@@ -57,64 +114,64 @@ function stringToEnum(value: string): VersionReleaseType | null {
   return null
 }
 
-async function processVersionJson(
-  releaseType: VersionReleaseType
-): Promise<void> {
-  try {
-    const inputVersionJson: string = core.getInput('version-json')
-    const version: Version = JSON.parse(inputVersionJson)
+// async function processVersionJson(
+//   releaseType: VersionReleaseType
+// ): Promise<void> {
+//   try {
+//     const inputVersionJson: string = getInput('version-json')
+//     const version: Version = JSON.parse(inputVersionJson)
 
-    // NOTE: for Trading Toolbox, patch and reversion are the same.
-    switch (releaseType) {
-      case VersionReleaseType.MAJOR: {
-        // Increment major version component is unchanged.
-        // Reset minor, patch/revision to 0.
+//     // NOTE: for Trading Toolbox, patch and reversion are the same.
+//     switch (releaseType) {
+//       case VersionReleaseType.MAJOR: {
+//         // Increment major version component is unchanged.
+//         // Reset minor, patch/revision to 0.
 
-        version.major++
-        version.minor = 0
-        version.patch = version.revision = 0
+//         version.major++
+//         version.minor = 0
+//         version.patch = version.revision = 0
 
-        break
-      }
-      case VersionReleaseType.MINOR: {
-        // Major version component is unchanged.
-        // Increment minor version component.
-        // Reset patch/revision to 0.
+//         break
+//       }
+//       case VersionReleaseType.MINOR: {
+//         // Major version component is unchanged.
+//         // Increment minor version component.
+//         // Reset patch/revision to 0.
 
-        version.minor++
-        version.patch = version.revision = 0
+//         version.minor++
+//         version.patch = version.revision = 0
 
-        break
-      }
-      case VersionReleaseType.PATCH: {
-        // Major version component is unchanged.
-        // Minor version component is unchanged.
-        // Incremment patch/revision.
+//         break
+//       }
+//       case VersionReleaseType.PATCH: {
+//         // Major version component is unchanged.
+//         // Minor version component is unchanged.
+//         // Incremment patch/revision.
 
-        version.patch = version.revision++
-        break
-      }
-    }
+//         version.patch = version.revision++
+//         break
+//       }
+//     }
 
-    // Build version component always increments.
-    version.build++
+//     // Build version component always increments.
+//     version.build++
 
-    // Set outputs for other workflow steps to use
-    core.setOutput('major', version.major)
-    core.setOutput('minor', version.minor)
-    core.setOutput('patch', version.patch)
-    core.setOutput('build', version.build)
-    core.setOutput('revision', version.revision)
-    core.setOutput('suffix', version.suffix)
+//     // Set outputs for other workflow steps to use
+//     setOutput('major', version.major)
+//     setOutput('minor', version.minor)
+//     setOutput('patch', version.patch)
+//     setOutput('build', version.build)
+//     setOutput('revision', version.revision)
+//     setOutput('suffix', version.suffix)
 
-    const versionString = `${version.major}.${version.minor}.${version.build}.${version.revision}`
+//     const versionString = `${version.major}.${version.minor}.${version.build}.${version.revision}`
 
-    core.setOutput('version', versionString)
-    core.setOutput('tag', `v${versionString}`)
-  } catch (error) {
-    // Fail the workflow run if an error occurs
-    if (error instanceof Error) {
-      core.setFailed('Invalid version json')
-    }
-  }
-}
+//     setOutput('version', versionString)
+//     setOutput('tag', `v${versionString}`)
+//   } catch (error) {
+//     // Fail the workflow run if an error occurs
+//     if (error instanceof Error) {
+//       setFailed('Invalid version json')
+//     }
+//   }
+// }
