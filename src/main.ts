@@ -1,6 +1,15 @@
 import * as core from '@actions/core'
 
-enum VersionUpdateType {
+interface Version {
+  major: number
+  minor: number
+  patch: number
+  build: number
+  revision: number
+  suffix: string
+}
+
+enum VersionReleaseType {
   MAJOR = 'MAJOR',
   MINOR = 'MINOR',
   PATCH = 'PATCH'
@@ -16,9 +25,9 @@ export async function run(): Promise<void> {
     // error when trying to cast a string to the enum.
     // Per https://thoughtbot.com/blog/the-trouble-with-typescript-enums, what's implemented below
     // seems to be the best workaround
-    const updateType: VersionUpdateType | undefined = Object.values(
-      VersionUpdateType
-    ).find(x => x === core.getInput('INPUT_UPDATE_TYPE'))
+    const updateType: VersionReleaseType | undefined = Object.values(
+      VersionReleaseType
+    ).find(x => x === core.getInput('INPUT_RELEASE_TYPE'))
 
     if (updateType === undefined) {
       throw new Error('Update type is undefined')
@@ -38,23 +47,14 @@ export async function run(): Promise<void> {
 }
 
 async function processVersionJson(
-  updateType: VersionUpdateType
+  updateType: VersionReleaseType
 ): Promise<void> {
-  interface Version {
-    major: number
-    minor: number
-    patch: number
-    build: number
-    revision: number
-    suffix: string
-  }
-
   try {
     const version: Version = JSON.parse(core.getInput('INPUT_VERSION_JSON'))
 
     // NOTE: for Trading Toolbox, patch and reversion are the same.
     switch (updateType) {
-      case VersionUpdateType.MAJOR: {
+      case VersionReleaseType.MAJOR: {
         // Increment major version component is unchanged.
         // Reset minor, patch/revision to 0.
 
@@ -64,7 +64,7 @@ async function processVersionJson(
 
         break
       }
-      case VersionUpdateType.MINOR: {
+      case VersionReleaseType.MINOR: {
         // Major version component is unchanged.
         // Increment minor version component.
         // Reset patch/revision to 0.
@@ -74,7 +74,7 @@ async function processVersionJson(
 
         break
       }
-      case VersionUpdateType.PATCH: {
+      case VersionReleaseType.PATCH: {
         // Major version component is unchanged.
         // Minor version component is unchanged.
         // Incremment patch/revision.

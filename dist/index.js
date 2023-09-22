@@ -2753,12 +2753,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(186));
-var VersionUpdateType;
-(function (VersionUpdateType) {
-    VersionUpdateType["MAJOR"] = "MAJOR";
-    VersionUpdateType["MINOR"] = "MINOR";
-    VersionUpdateType["PATCH"] = "PATCH";
-})(VersionUpdateType || (VersionUpdateType = {}));
+var VersionReleaseType;
+(function (VersionReleaseType) {
+    VersionReleaseType["MAJOR"] = "MAJOR";
+    VersionReleaseType["MINOR"] = "MINOR";
+    VersionReleaseType["PATCH"] = "PATCH";
+})(VersionReleaseType || (VersionReleaseType = {}));
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -2769,7 +2769,7 @@ async function run() {
         // error when trying to cast a string to the enum.
         // Per https://thoughtbot.com/blog/the-trouble-with-typescript-enums, what's implemented below
         // seems to be the best workaround
-        const updateType = Object.values(VersionUpdateType).find(x => x === core.getInput('INPUT_UPDATE_TYPE'));
+        const updateType = Object.values(VersionReleaseType).find(x => x === core.getInput('INPUT_RELEASE_TYPE'));
         if (updateType === undefined) {
             throw new Error('Update type is undefined');
         }
@@ -2789,7 +2789,7 @@ async function processVersionJson(updateType) {
         const version = JSON.parse(core.getInput('INPUT_VERSION_JSON'));
         // NOTE: for Trading Toolbox, patch and reversion are the same.
         switch (updateType) {
-            case VersionUpdateType.MAJOR: {
+            case VersionReleaseType.MAJOR: {
                 // Increment major version component is unchanged.
                 // Reset minor, patch/revision to 0.
                 version.major++;
@@ -2797,7 +2797,7 @@ async function processVersionJson(updateType) {
                 version.patch = version.revision = 0;
                 break;
             }
-            case VersionUpdateType.MINOR: {
+            case VersionReleaseType.MINOR: {
                 // Major version component is unchanged.
                 // Increment minor version component.
                 // Reset patch/revision to 0.
@@ -2805,7 +2805,7 @@ async function processVersionJson(updateType) {
                 version.patch = version.revision = 0;
                 break;
             }
-            case VersionUpdateType.PATCH: {
+            case VersionReleaseType.PATCH: {
                 // Major version component is unchanged.
                 // Minor version component is unchanged.
                 // Incremment patch/revision.
