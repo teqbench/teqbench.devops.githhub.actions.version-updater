@@ -5,13 +5,11 @@ author: "Teq Bench"
 # Define your inputs here.
 inputs:
   INPUT_UPDATE_TYPE:
-    type: string
-    required: true
     description: "Type of version update. Options: MAJOR, MINOR, PATCH."
-  INPUT_VERSION_JSON:
-    type: string
     required: true
+  INPUT_VERSION_JSON:
     description: "JSON string containing version data."
+    required: true
 
 # Define your outputs here.
 outputs:
