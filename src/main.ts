@@ -1,16 +1,6 @@
 import * as core from '@actions/core'
-import { debug } from 'console'
 
-interface Version {
-  major: number
-  minor: number
-  patch: number
-  build: number
-  revision: number
-  suffix: string
-}
-
-enum UpdateType {
+enum VersionUpdateType {
   MAJOR = 'MAJOR',
   MINOR = 'MINOR',
   PATCH = 'PATCH'
@@ -26,9 +16,9 @@ export async function run(): Promise<void> {
     // error when trying to cast a string to the enum.
     // Per https://thoughtbot.com/blog/the-trouble-with-typescript-enums, what's implemented below
     // seems to be the best workaround
-    const updateType: UpdateType | undefined = Object.values(UpdateType).find(
-      x => x === core.getInput('INPUT_UPDATE_TYPE')
-    )
+    const updateType: VersionUpdateType | undefined = Object.values(
+      VersionUpdateType
+    ).find(x => x === core.getInput('INPUT_UPDATE_TYPE'))
 
     if (updateType === undefined) {
       throw new Error('Update type is undefined')
@@ -47,13 +37,24 @@ export async function run(): Promise<void> {
   }
 }
 
-async function processVersionJson(updateType: UpdateType) {
+async function processVersionJson(
+  updateType: VersionUpdateType
+): Promise<void> {
+  interface Version {
+    major: number
+    minor: number
+    patch: number
+    build: number
+    revision: number
+    suffix: string
+  }
+
   try {
     const version: Version = JSON.parse(core.getInput('INPUT_VERSION_JSON'))
 
     // NOTE: for Trading Toolbox, patch and reversion are the same.
     switch (updateType) {
-      case UpdateType.MAJOR: {
+      case VersionUpdateType.MAJOR: {
         // Increment major version component is unchanged.
         // Reset minor, patch/revision to 0.
 
@@ -63,7 +64,7 @@ async function processVersionJson(updateType: UpdateType) {
 
         break
       }
-      case UpdateType.MINOR: {
+      case VersionUpdateType.MINOR: {
         // Major version component is unchanged.
         // Increment minor version component.
         // Reset patch/revision to 0.
@@ -73,7 +74,7 @@ async function processVersionJson(updateType: UpdateType) {
 
         break
       }
-      case UpdateType.PATCH: {
+      case VersionUpdateType.PATCH: {
         // Major version component is unchanged.
         // Minor version component is unchanged.
         // Incremment patch/revision.
@@ -94,7 +95,7 @@ async function processVersionJson(updateType: UpdateType) {
     core.setOutput('revision', version.revision)
     core.setOutput('suffix', version.suffix)
 
-    const versionString: String = `${version.major}.${version.minor}.${version.build}.${version.revision}`
+    const versionString = `${version.major}.${version.minor}.${version.build}.${version.revision}`
 
     core.setOutput('version', versionString)
     core.setOutput('tag', `v${versionString}`)
