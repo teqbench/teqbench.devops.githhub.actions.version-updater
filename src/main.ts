@@ -21,14 +21,11 @@ enum VersionReleaseType {
  */
 export async function run(): Promise<void> {
   try {
-    // TypeScript doest not have anyting like ENUM.TryParse and does not throw an
-    // error when trying to cast a string to the enum.
-    // Per https://thoughtbot.com/blog/the-trouble-with-typescript-enums, what's implemented below
-    // seems to be the best workaround
     const inputReleaseType: string = getInput('release-type')
 
-    // debug(`version release type = ${inputReleaseType}`)
-
+    // TypeScript doest not have anyting like ENUM.TryParse and does not throw an
+    // error when trying to cast a string to the enum. Created stringToEnum as a workaround
+    // to convert a string to an enum. If fails, returns a null.
     const releaseType: VersionReleaseType | null =
       stringToEnum(inputReleaseType)
 
@@ -36,7 +33,6 @@ export async function run(): Promise<void> {
       throw new Error('Update type is undefined')
     }
 
-    // processVersionJson(releaseType)
     try {
       const inputVersionJson: string = getInput('version-json')
       const version: Version = JSON.parse(inputVersionJson)
