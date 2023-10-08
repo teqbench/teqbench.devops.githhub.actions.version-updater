@@ -107,8 +107,7 @@ export async function run(): Promise<void> {
 function stringToEnum(value: string): VersionReleaseType | null {
   const uc: string = value.toUpperCase()
   if (Object.values(VersionReleaseType).findIndex(x => x === uc) >= 0) {
-    return value as VersionReleaseType
+    return uc as VersionReleaseType
   }
   return null
 }
-
