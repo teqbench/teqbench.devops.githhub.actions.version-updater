@@ -38,7 +38,7 @@ describe('action', () => {
     expect(runMock).toHaveReturned()
   })
 
-  it('valid version json; update major', async () => {
+  it('valid version json; update major 1', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
@@ -55,7 +55,41 @@ describe('action', () => {
     expect(runMock).toHaveReturned()
   })
 
-  it('valid version json; update minor', async () => {
+  it('valid version json; update major 2', async () => {
+    // Set the action's inputs as return values from core.getInput()
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'release-type':
+          return 'Major'
+        case 'version-json':
+          return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+  })
+
+  it('valid version json; update major 3', async () => {
+    // Set the action's inputs as return values from core.getInput()
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'release-type':
+          return 'major'
+        case 'version-json':
+          return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+  })
+
+  it('valid version json; update minor 1', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
@@ -72,12 +106,80 @@ describe('action', () => {
     expect(runMock).toHaveReturned()
   })
 
-  it('valid version json; update patch', async () => {
+  it('valid version json; update minor 2', async () => {
+    // Set the action's inputs as return values from core.getInput()
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'release-type':
+          return 'Minor'
+        case 'version-json':
+          return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+  })
+
+  it('valid version json; update minor 3', async () => {
+    // Set the action's inputs as return values from core.getInput()
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'release-type':
+          return 'minor'
+        case 'version-json':
+          return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+  })
+
+  it('valid version json; update patch 1', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
         case 'release-type':
           return 'PATCH'
+        case 'version-json':
+          return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+  })
+
+  it('valid version json; update patch 2', async () => {
+    // Set the action's inputs as return values from core.getInput()
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'release-type':
+          return 'Patch'
+        case 'version-json':
+          return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+  })
+
+  it('valid version json; update patch 3', async () => {
+    // Set the action's inputs as return values from core.getInput()
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'release-type':
+          return 'patch'
         case 'version-json':
           return '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"versionSuffix":"alpha"}'
         default:
