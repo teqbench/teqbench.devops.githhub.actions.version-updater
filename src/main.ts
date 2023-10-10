@@ -38,7 +38,7 @@ export async function run(): Promise<void> {
       const version: Version = JSON.parse(inputVersionJson)
 
       // NOTE: for Trading Toolbox, patch and reversion are the same.
-      switch (releaseType) {
+      switch (releaseType as VersionReleaseType) {
         case VersionReleaseType.MAJOR: {
           // Increment major version component is unchanged.
           // Reset minor, patch/revision to 0.
