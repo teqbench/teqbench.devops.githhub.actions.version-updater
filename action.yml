@@ -1,6 +1,6 @@
 name: "Get Version Number Components"
 description: "Gets the version number compoents (i.e. major, minor, patch, build, revision, and suffix) from supplied version JSON string."
-author: "Teq Bench"
+author: "TeqBench"
 
 # Define your inputs here.
 inputs:
