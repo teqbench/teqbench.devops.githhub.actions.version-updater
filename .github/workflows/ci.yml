@@ -39,29 +39,3 @@ jobs:
       - name: Test
         id: npm-ci-test
         run: npm run ci-test
-
-  test-action:
-    name: GitHub Actions Test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-
-      - name: Test Local Action
-        id: test-action
-        uses: ./
-        with:
-          version-json: '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"suffix":"alpha"}'
-
-      - name: Print Output
-        id: output
-        run: |
-          echo "major version = ${{ steps.test-action.outputs.major }}"
-          echo "minor version = ${{ steps.test-action.outputs.minor }}"
-          echo "patch version = ${{ steps.test-action.outputs.patch }}"
-          echo "build version = ${{ steps.test-action.outputs.build }}"
-          echo "revision version = ${{ steps.test-action.outputs.revision }}"
-          echo "suffix version = ${{ steps.test-action.outputs.suffix }}"
-          
