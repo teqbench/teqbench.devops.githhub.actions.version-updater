@@ -5,7 +5,7 @@ author: "TeqBench"
 # Define your inputs here.
 inputs:
   release-type:
-    description: "Type of version update. Options: MAJOR, MINOR, PATCH."
+    description: "Type of version update. Options: MAJOR, MINOR, PATCH, BUILD."
     required: true
   version-json:
     description: "JSON string containing version data."
