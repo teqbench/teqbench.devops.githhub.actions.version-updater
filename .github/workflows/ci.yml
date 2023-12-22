@@ -53,6 +53,7 @@ jobs:
         id: test-action
         uses: ./
         with:
+          release-type: 'major'
           version-json: '{"major":31,"minor":1,"patch":0,"build":457,"revision":0,"suffix":"alpha"}'
 
       - name: Print Output
