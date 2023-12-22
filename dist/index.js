@@ -2735,6 +2735,7 @@ var VersionReleaseType;
     VersionReleaseType["MAJOR"] = "MAJOR";
     VersionReleaseType["MINOR"] = "MINOR";
     VersionReleaseType["PATCH"] = "PATCH";
+    VersionReleaseType["BUILD"] = "BUILD";
 })(VersionReleaseType || (VersionReleaseType = {}));
 /**
  * The main function for the action.
@@ -2753,6 +2754,8 @@ async function run() {
         try {
             const inputVersionJson = (0, core_1.getInput)('version-json');
             const version = JSON.parse(inputVersionJson);
+            // If releaseType is BUILD then major, minor, patch and revision components will NOT be updated and ONLY
+            // the build version component will be updated as it's always incremented.
             // NOTE: for Trading Toolbox, patch and reversion are the same.
             switch (releaseType) {
                 case VersionReleaseType.MAJOR: {

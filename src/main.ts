@@ -12,7 +12,8 @@ interface Version {
 enum VersionReleaseType {
   MAJOR = 'MAJOR',
   MINOR = 'MINOR',
-  PATCH = 'PATCH'
+  PATCH = 'PATCH',
+  BUILD = 'BUILD'
 }
 
 /**
@@ -36,6 +37,9 @@ export async function run(): Promise<void> {
     try {
       const inputVersionJson: string = getInput('version-json')
       const version: Version = JSON.parse(inputVersionJson)
+
+      // If releaseType is BUILD then major, minor, patch and revision components will NOT be updated and ONLY
+      // the build version component will be updated as it's always incremented.
 
       // NOTE: for Trading Toolbox, patch and reversion are the same.
       switch (releaseType) {
